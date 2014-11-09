@@ -22,23 +22,22 @@ project(':library') {
     apply plugin: 'com.android.library'
 
     android.defaultConfig.applicationId group
-    android.defaultConfig.targetSdkVersion 4
 }
 
 project(':sample') {
     apply plugin: 'com.android.application'
 
     android.defaultConfig.applicationId group + '.sample'
-    android.defaultConfig.targetSdkVersion 16
 }
 
 configure([project(':library'), project(':sample')]) {
     android {
-        compileSdkVersion 16
+        compileSdkVersion 21
         buildToolsVersion "21.1.0"
 
         defaultConfig {
             minSdkVersion 4
+            targetSdkVersion 21
             versionCode VERSION_CODE.toInteger()
             versionName VERSION_NAME
         }
@@ -67,7 +66,7 @@ configure([project(':library'), project(':sample')]) {
     }
 
     dependencies {
-        compile 'com.android.support:support-v4:18.0.0'
+        compile 'com.android.support:support-v4:21.0.0'
     }
 }
 
