@@ -1,0 +1,105 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.14.+'
+    }
+}
+
+allprojects {
+    group = PROJECTS_GROUP
+    version = new Version(VERSION_NAME)
+    status = version.status
+
+    repositories {
+        jcenter()
+    }
+}
+
+project(':library') {
+    apply plugin: 'com.android.library'
+
+    android.defaultConfig.applicationId group
+    android.defaultConfig.targetSdkVersion 4
+}
+
+project(':sample') {
+    apply plugin: 'com.android.application'
+
+    android.defaultConfig.applicationId group + '.sample'
+    android.defaultConfig.targetSdkVersion 16
+}
+
+configure([project(':library'), project(':sample')]) {
+    android {
+        compileSdkVersion 16
+        buildToolsVersion "21.1.0"
+
+        defaultConfig {
+            minSdkVersion 4
+            versionCode VERSION_CODE.toInteger()
+            versionName VERSION_NAME
+        }
+
+        sourceSets {
+            main {
+                manifest.srcFile 'AndroidManifest.xml'
+                java.srcDirs = ['src']
+                resources.srcDirs = ['src']
+                aidl.srcDirs = ['src']
+                renderscript.srcDirs = ['src']
+                res.srcDirs = ['res']
+                assets.srcDirs = ['assets']
+                jniLibs.srcDirs = ['libs']
+            }
+
+            androidTest.setRoot('tests')
+        }
+
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            }
+        }
+    }
+
+    dependencies {
+        compile 'com.android.support:support-v4:18.0.0'
+    }
+}
+
+
+import java.text.SimpleDateFormat
+
+class Version {
+    String originalVersion
+    String thisVersion
+    String status
+    Date buildTime
+
+    Version(String versionValue) {
+        buildTime = new Date()
+        originalVersion = versionValue
+        if (originalVersion.endsWith('-SNAPSHOT')) {
+            status = 'integration'
+            thisVersion = originalVersion.substring(0, originalVersion.length() - 'SNAPSHOT'.length()) + getTimestamp()
+        } else {
+            status = 'release'
+            thisVersion = versionValue
+        }
+    }
+
+    String getTimestamp() {
+        // Convert local file timestamp to UTC
+        def format = new SimpleDateFormat('yyyyMMddHHmmss')
+        format.setCalendar(Calendar.getInstance(TimeZone.getTimeZone('UTC')));
+        return format.format(buildTime)
+    }
+
+    String toString() {
+        thisVersion
+    }
+}
