@@ -8,6 +8,43 @@ buildscript {
     }
 }
 
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.1"
+
+    defaultConfig {
+        minSdkVersion 4
+        targetSdkVersion 21
+        versionCode VERSION_CODE.toInteger()
+        versionName VERSION_NAME
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
+
+        androidTest.setRoot('tests')
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:21.0.0'
+}
+
+
+
+
+
 /// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Generate Javadoc ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // stolen from http://stackoverflow.com/questions/23297562/gradle-javadoc-and-android-documentation#answer-24026735
 android.libraryVariants.all { variant ->
