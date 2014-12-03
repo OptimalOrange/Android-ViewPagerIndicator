@@ -3,16 +3,15 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.github.dcendents:android-maven-plugin:1.1'
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6"
+        classpath 'com.github.dcendents:android-maven-plugin:1.2'
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0"
     }
 }
 
 /// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Generate Javadoc ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // stolen from http://stackoverflow.com/questions/23297562/gradle-javadoc-and-android-documentation#answer-24026735
 android.libraryVariants.all { variant ->
-    task("generate${variant.name}Javadoc", type: Javadoc,
-            dependsOn: "extract${variant.name.capitalize()}Annotations") {
+    task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
         failOnError = false
         options.encoding = 'UTF-8'
         source = variant.javaCompile.source
@@ -30,12 +29,12 @@ android.libraryVariants.all { variant ->
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ publish ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-apply plugin: 'android-maven'
+apply plugin: 'com.github.dcendents.android-maven'
 
-task androidJavadocsJar(type: Jar, dependsOn: 'generatereleaseJavadoc')
+task androidJavadocsJar(type: Jar, dependsOn: 'generateReleaseJavadoc')
 androidJavadocsJar.doFirst {
     classifier = 'javadoc'
-    from generatereleaseJavadoc.destinationDir
+    from generateReleaseJavadoc.destinationDir
 }
 
 task androidSourcesJar(type: Jar) {
