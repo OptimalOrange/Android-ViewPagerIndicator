@@ -68,7 +68,9 @@ bintray {
     publish = true //If version should be auto published after an upload
     pkg {
         repo = 'maven'
-        userOrg = 'optimalorange'
+        if(hasProperty('BINTRAY_USER_ORGANIZATION')) {
+            userOrg = BINTRAY_USER_ORGANIZATION
+        }
         name = "${project.group}:${project.name}"
         websiteUrl = 'http://viewpagerindicator.com'
         issueTrackerUrl = 'https://github.com/OptimalOrange/Android-ViewPagerIndicator/issues'
