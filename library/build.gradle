@@ -3,6 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
+        // use for publishing
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0"
     }
@@ -96,6 +97,7 @@ artifacts {
 
 if(!hasProperty('BINTRAY_USER') || !hasProperty('BINTRAY_KEY')) return
 
+// see https://github.com/bintray/gradle-bintray-plugin
 apply plugin: 'com.jfrog.bintray'
 
 bintray {
@@ -105,13 +107,13 @@ bintray {
     publish = true //If version should be auto published after an upload
     pkg {
         repo = 'maven'
-        if(hasProperty('BINTRAY_USER_ORGANIZATION')) {
+        if(project.hasProperty('BINTRAY_USER_ORGANIZATION')) {
             userOrg = BINTRAY_USER_ORGANIZATION
         }
         name = "${project.group}:${project.name}"
         websiteUrl = 'http://viewpagerindicator.com'
-        issueTrackerUrl = 'https://github.com/OptimalOrange/Android-ViewPagerIndicator/issues'
-        vcsUrl = 'https://github.com/OptimalOrange/Android-ViewPagerIndicator.git'
+        issueTrackerUrl = 'https://github.com/JakeWharton/Android-ViewPagerIndicator/issues'
+        vcsUrl = 'https://github.com/JakeWharton/Android-ViewPagerIndicator.git'
         licenses = ['Apache-2.0']
         labels = ['viewpagerindicator', 'ViewPager', 'indicator', 'Tab', 'Android']
         attributes = ['plat': ['Android']]
